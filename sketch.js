@@ -1,40 +1,45 @@
-let arr = [];
-let arrSize;
-let StrokeWeight = 15;
+let fullArray = [];
+let fullArraySize;
+let StrokeWeight = 20;
 
 let button;
 let sort;
+let done;
 let curr;
 
 function setup() {
   createCanvas(600, 300);
+  textSize(32);
   colorMode(HSB);
   resetButton();
   bubbleSortButton();
+//  quickSortButton();
   createUnsortedArray();
 }
 
 function draw() {
   background(25);
   
-  for(let i = 0; i < arr.length; i++) {
-    if (curr !== i) stroke(arr[i], 255, 255);
+  for(let i = 0; i < fullArray.length; i++) {
+    if (curr !== i) stroke(fullArray[i], 255, 255);
     else stroke(0);
     
-    line(i*StrokeWeight+StrokeWeight/2, height, i*StrokeWeight+StrokeWeight/2, height - arr[i]);
+    line(i*StrokeWeight+StrokeWeight/2, height, i*StrokeWeight+StrokeWeight/2, height - fullArray[i]);
   }
   if (sort) sort();
+  if (done) finished();
 }
 
 function createUnsortedArray() {
+  done = false;
   sort = undefined;
   curr = -1;
   
   strokeWeight(StrokeWeight);
-  arrSize = width / StrokeWeight;
+  fullArraySize = width / StrokeWeight;
   
-  for(let i = 0; i < arrSize; i++) {
-    arr[i] = random(height*0.95);
+  for(let i = 0; i < fullArraySize; i++) {
+    fullArray[i] = random(height*0.95);
   }
 }
 
@@ -49,6 +54,7 @@ function resetButton() {
   button.style('transition-duration', '0.4s');
 }
 
+// bubble sort
 function bubbleSortButton() {
   button = createButton('Bubble Sort');
   button.position(80, 320);
@@ -66,24 +72,77 @@ function startBubbleSort() {
 }
 
 function bubbleSort() {
-  if (arr[curr] > arr[curr+1]) {
-    let copy = arr[curr];
-    arr[curr] = arr[curr+1];
-    arr[curr+1] = copy;
+  if (fullArray[curr] > fullArray[curr+1]) {
+    swap(curr, curr+1);
   }
 
   curr++;
 
-  if (curr >= arrSize) {
-    arrSize--;
-    if (arrSize !== 0) curr = 0;
+  if (curr >= fullArraySize) {
+    fullArraySize--;
+    if (fullArraySize !== 0) curr = 0;
     else curr = -1;
   }
 
-  if (arrSize < 0) {
-    noLoop();
-    noStroke();
-    textSize(32);
-    text('Sorted!', 10, 30);
+  if (fullArraySize < 0) {
+    done = true;
   }
+}
+
+// quick sort
+function quickSortButton() {
+  button = createButton('Quick Sort');
+  button.position(185, 320);
+  button.mousePressed(startQuickSort);
+
+  button.style('border', 'none');
+  button.style('padding', '6px 10px');
+  button.style('border-radius', '6px');
+  button.style('transition-duration', '0.4s');
+}
+
+function startQuickSort() {
+  sort = quickSort;
+}
+
+function quickSort() {
+  qSort(0, fullArray.length - 1);
+}
+
+function qSort(start, end) {
+    if (start >= end) return;
+
+    let index = partition(start, end);
+    qSort(start, index - 1);
+    qSort(index + 1, end)
+}
+
+function partition(arr, start, end) {
+    let pivotIndex = start;
+    let pivotValue = fullArray[end];
+
+    for(let i = start; i <= end; i++) {
+        if(fullArray[i] < pivotValue) {
+            swap(i, pivotIndex);
+            pivotIndex++;
+        }
+    }
+    swap(end, pivotIndex);
+    return pivotIndex;
+}
+
+// array swapping
+function swap(first, second) {
+    let copy = fullArray[first];
+    fullArray[first] = fullArray[second];
+    fullArray[second] = copy;
+}
+
+// finished sorting
+function finished() {
+  curr = -1;
+  sort = undefined;
+  noStroke();
+  fill(0, 100, 150);
+  text('Sorted!', 10, 35);
 }
