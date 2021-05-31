@@ -1,8 +1,9 @@
 let fullArray = [];
 let fullArraySize;
-let StrokeWeight = 20;
+let strokeWeight = 20;
 
 let button;
+let slider;
 let sort;
 let done;
 let curr;
@@ -11,6 +12,7 @@ function setup() {
   createCanvas(600, 300);
   textSize(32);
   colorMode(HSB);
+  setupSlider();
   resetButton();
   bubbleSortButton();
 //  quickSortButton();
@@ -19,12 +21,18 @@ function setup() {
 
 function draw() {
   background(25);
-  
+
+  let val = slider.value();
+  if (val !== strokeWeight) {
+    strokeWeight = val;
+    createUnsortedArray();
+  }
+
   for(let i = 0; i < fullArray.length; i++) {
     if (curr !== i) stroke(fullArray[i], 255, 255);
     else stroke(0);
     
-    line(i*StrokeWeight+StrokeWeight/2, height, i*StrokeWeight+StrokeWeight/2, height - fullArray[i]);
+    line(i*strokeWeight+strokeWeight/2, height, i*strokeWeight+strokeWeight/2, height - fullArray[i]);
   }
   if (sort) sort();
   if (done) finished();
@@ -35,8 +43,8 @@ function createUnsortedArray() {
   sort = undefined;
   curr = -1;
   
-  strokeWeight(StrokeWeight);
-  fullArraySize = width / StrokeWeight;
+  strokeWeight(strokeWeight);
+  fullArraySize = width / strokeWeight;
   
   for(let i = 0; i < fullArraySize; i++) {
     fullArray[i] = random(height*0.95);
@@ -145,4 +153,11 @@ function finished() {
   noStroke();
   fill(0, 100, 150);
   text('Sorted!', 10, 35);
+}
+
+function setupSlider() {
+  // createSlider(min, max, default, step_size);
+  slider = createSlider(5, 50, 5);
+  slider.position(10, 360);
+  slider.style('width', '100px');
 }
