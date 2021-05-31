@@ -1,6 +1,6 @@
 let fullArray = [];
 let fullArraySize;
-let strokeWeight = 20;
+let sW = 20;
 
 let button;
 let slider;
@@ -23,8 +23,8 @@ function draw() {
   background(25);
 
   let val = slider.value();
-  if (val !== strokeWeight) {
-    strokeWeight = val;
+  if (val !== sW) {
+    sW = val;
     createUnsortedArray();
   }
 
@@ -32,7 +32,7 @@ function draw() {
     if (curr !== i) stroke(fullArray[i], 255, 255);
     else stroke(0);
     
-    line(i*strokeWeight+strokeWeight/2, height, i*strokeWeight+strokeWeight/2, height - fullArray[i]);
+    line(i*sW+sW/2, height, i*sW+sW/2, height - fullArray[i]);
   }
   if (sort) sort();
   if (done) finished();
@@ -43,8 +43,8 @@ function createUnsortedArray() {
   sort = undefined;
   curr = -1;
   
-  strokeWeight(strokeWeight);
-  fullArraySize = width / strokeWeight;
+  strokeWeight(sW);
+  fullArraySize = width / sW;
   
   for(let i = 0; i < fullArraySize; i++) {
     fullArray[i] = random(height*0.95);
