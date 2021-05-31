@@ -157,7 +157,7 @@ function finished() {
 
 function setupSlider() {
   // createSlider(min, max, default, step_size);
-  slider = createSlider(5, 50, 5);
+  slider = createSlider(5, 50, 20, 5);
   slider.position(10, 360);
   slider.style('width', '100px');
 }
